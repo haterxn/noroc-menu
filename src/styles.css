@@ -122,6 +122,64 @@ body {
   color: white;
 }
 
+/* Booking banner */
+.booking-banner {
+  background: linear-gradient(135deg, #7B2D3B 0%, #9E4A5A 100%);
+  padding: 0 20px;
+}
+
+.booking-banner-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+  gap: 16px;
+}
+
+.booking-banner-text {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+}
+
+.booking-banner-icon {
+  font-size: 28px;
+}
+
+.booking-banner-text strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+}
+
+.booking-banner-text span {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.btn-booking {
+  padding: 10px 24px;
+  background: var(--gold);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: var(--font-body);
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+
+.btn-booking:hover { background: var(--gold-dark); }
+
+.booking-modal {
+  max-width: 480px;
+}
+
 /* Category tabs */
 .category-tabs {
   position: sticky;

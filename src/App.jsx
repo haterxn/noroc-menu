@@ -7,6 +7,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import AdminCategories from './pages/AdminCategories';
 import AdminItems from './pages/AdminItems';
 import AdminFeedback from './pages/AdminFeedback';
+import AdminBookings from './pages/AdminBookings';
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="categories" element={<AdminCategories />} />
         <Route path="items" element={<AdminItems />} />
         <Route path="feedback" element={<AdminFeedback />} />
+        <Route path="bookings" element={<AdminBookings />} />
       </Route>
     </Routes>
   );

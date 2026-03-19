@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { getCategories, getItems, sendFeedback } from '../api';
+import { getCategories, getItems, sendFeedback, sendBooking } from '../api';
 
 export default function MenuPage() {
   const [categories, setCategories] = useState([]);
@@ -12,6 +12,12 @@ export default function MenuPage() {
   const [fb, setFb] = useState({ name: '', phone: '', message: '' });
   const [fbSent, setFbSent] = useState(false);
   const [fbLoading, setFbLoading] = useState(false);
+
+  // Booking modal
+  const [showBooking, setShowBooking] = useState(false);
+  const [booking, setBooking] = useState({ name: '', phone: '', date: '', guests: '', hall: '', message: '' });
+  const [bookingSent, setBookingSent] = useState(false);
+  const [bookingLoading, setBookingLoading] = useState(false);
 
   useEffect(() => {
     Promise.all([getCategories(), getItems()]).then(([cats, itms]) => {
@@ -43,6 +49,17 @@ export default function MenuPage() {
     setFbLoading(false);
   };
 
+  const handleBooking = async (e) => {
+    e.preventDefault();
+    setBookingLoading(true);
+    try {
+      await sendBooking(booking);
+      setBookingSent(true);
+      setBooking({ name: '', phone: '', date: '', guests: '', hall: '', message: '' });
+    } catch { /* ignore */ }
+    setBookingLoading(false);
+  };
+
   // Group items by category
   const grouped = categories.map(cat => ({
     ...cat,
@@ -65,6 +82,83 @@ export default function MenuPage() {
           <span>(+373) 688 21 888</span>
         </div>
       </header>
+
+      {/* Booking banner */}
+      <div className="booking-banner">
+        <div className="booking-banner-inner">
+          <div className="booking-banner-text">
+            <span className="booking-banner-icon">&#127878;</span>
+            <div>
+              <strong>{lang === 'ru' ? 'Банкетный зал' : 'Sala de banchet'}</strong>
+              <span>{lang === 'ru' ? 'Свадьбы, юбилеи, корпоративы' : 'Nunți, aniversări, corporate'}</span>
+            </div>
+          </div>
+          <button className="btn-booking" onClick={() => { setShowBooking(true); setBookingSent(false); }}>
+            {lang === 'ru' ? 'Забронировать' : 'Rezervă'}
+          </button>
+        </div>
+      </div>
+
+      {/* Booking modal */}
+      {showBooking && (
+        <div className="modal-overlay" onClick={() => setShowBooking(false)}>
+          <div className="modal booking-modal" onClick={e => e.stopPropagation()}>
+            <h2>{lang === 'ru' ? 'Бронирование зала' : 'Rezervarea sălii'}</h2>
+            <p style={{ color: 'var(--text-light)', fontSize: '0.9rem', marginBottom: '20px' }}>
+              {lang === 'ru' ? 'Оставьте заявку и мы свяжемся с вами' : 'Lăsați o cerere și vă vom contacta'}
+            </p>
+            {bookingSent ? (
+              <div className="feedback-success">
+                {lang === 'ru' ? 'Спасибо! Мы свяжемся с вами для подтверждения брони.' : 'Mulțumim! Vă vom contacta pentru confirmare.'}
+              </div>
+            ) : (
+              <form className="modal-form" onSubmit={handleBooking}>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>{lang === 'ru' ? 'Имя *' : 'Numele *'}</label>
+                    <input className="form-input" value={booking.name} onChange={e => setBooking({ ...booking, name: e.target.value })} required />
+                  </div>
+                  <div className="form-group">
+                    <label>{lang === 'ru' ? 'Телефон *' : 'Telefon *'}</label>
+                    <input className="form-input" type="tel" value={booking.phone} onChange={e => setBooking({ ...booking, phone: e.target.value })} required />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>{lang === 'ru' ? 'Дата мероприятия *' : 'Data evenimentului *'}</label>
+                    <input className="form-input" type="date" value={booking.date} onChange={e => setBooking({ ...booking, date: e.target.value })} required />
+                  </div>
+                  <div className="form-group">
+                    <label>{lang === 'ru' ? 'Кол-во гостей' : 'Număr de invitați'}</label>
+                    <input className="form-input" type="number" min="1" value={booking.guests} onChange={e => setBooking({ ...booking, guests: e.target.value })} />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label>{lang === 'ru' ? 'Тип мероприятия' : 'Tipul evenimentului'}</label>
+                  <select className="form-input" value={booking.hall} onChange={e => setBooking({ ...booking, hall: e.target.value })}>
+                    <option value="">{lang === 'ru' ? 'Выберите...' : 'Selectați...'}</option>
+                    <option value="wedding">{lang === 'ru' ? 'Свадьба' : 'Nuntă'}</option>
+                    <option value="birthday">{lang === 'ru' ? 'День рождения / Юбилей' : 'Zi de naștere / Aniversare'}</option>
+                    <option value="corporate">{lang === 'ru' ? 'Корпоратив' : 'Corporate'}</option>
+                    <option value="banquet">{lang === 'ru' ? 'Банкет' : 'Banchet'}</option>
+                    <option value="other">{lang === 'ru' ? 'Другое' : 'Altele'}</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>{lang === 'ru' ? 'Пожелания' : 'Dorințe'}</label>
+                  <textarea className="form-textarea" style={{ minHeight: '60px' }} value={booking.message} onChange={e => setBooking({ ...booking, message: e.target.value })} />
+                </div>
+                <div className="modal-actions">
+                  <button type="button" className="btn-cancel" onClick={() => setShowBooking(false)}>{lang === 'ru' ? 'Отмена' : 'Anulare'}</button>
+                  <button type="submit" className="btn-primary" disabled={bookingLoading}>
+                    {bookingLoading ? (lang === 'ru' ? 'Отправка...' : 'Se trimite...') : (lang === 'ru' ? 'Отправить заявку' : 'Trimite cererea')}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Category tabs */}
       {categories.length > 0 && (

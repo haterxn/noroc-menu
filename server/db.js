@@ -52,6 +52,18 @@ db.exec(`
     username TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL
   );
+
+  CREATE TABLE IF NOT EXISTS bookings (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    date TEXT NOT NULL,
+    guests INTEGER,
+    hall TEXT,
+    message TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    status TEXT DEFAULT 'new'
+  );
 `);
 
 // Create default admin if none exists

@@ -27,6 +27,7 @@ export default function AdminLayout() {
           <NavLink to="/admin/categories">Категории</NavLink>
           <NavLink to="/admin/items">Позиции</NavLink>
           <NavLink to="/admin/feedback">Обратная связь</NavLink>
+          <NavLink to="/admin/bookings">Бронирование</NavLink>
           <NavLink to="/">Сайт меню</NavLink>
         </nav>
         <div className="admin-logout">

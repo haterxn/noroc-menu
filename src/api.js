@@ -125,6 +125,38 @@ export async function deleteFeedback(id) {
   return res.json();
 }
 
+// Bookings
+export async function sendBooking(data) {
+  const res = await fetch(`${API}/bookings`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  });
+  return res.json();
+}
+
+export async function getBookings() {
+  const res = await fetch(`${API}/bookings`, { headers: authHeaders() });
+  return res.json();
+}
+
+export async function updateBookingStatus(id, status) {
+  const res = await fetch(`${API}/bookings/${id}/status`, {
+    method: 'PUT',
+    headers: { ...authHeaders(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status }),
+  });
+  return res.json();
+}
+
+export async function deleteBooking(id) {
+  const res = await fetch(`${API}/bookings/${id}`, {
+    method: 'DELETE',
+    headers: authHeaders(),
+  });
+  return res.json();
+}
+
 // Stats
 export async function getStats() {
   const res = await fetch(`${API}/stats`, { headers: authHeaders() });

@@ -13,7 +13,7 @@ const __dirname = dirname(__filename);
 const ROOT = join(__dirname, '..');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.NODE_ENV === 'production' ? (process.env.PORT || 3001) : 3001;
 const JWT_SECRET = 'noroc-secret-key-change-in-production';
 
 // Ensure uploads directory
@@ -207,13 +207,40 @@ app.delete('/api/feedback/:id', auth, (req, res) => {
   res.json({ success: true });
 });
 
+// ==================== BOOKINGS ====================
+app.post('/api/bookings', (req, res) => {
+  const { name, phone, date, guests, hall, message } = req.body;
+  if (!name || !phone || !date) return res.status(400).json({ error: 'Name, phone and date required' });
+  db.prepare('INSERT INTO bookings (name, phone, date, guests, hall, message) VALUES (?, ?, ?, ?, ?, ?)')
+    .run(name, phone, date, guests || null, hall || null, message || null);
+  res.json({ success: true });
+});
+
+app.get('/api/bookings', auth, (req, res) => {
+  const items = db.prepare('SELECT * FROM bookings ORDER BY created_at DESC').all();
+  res.json(items);
+});
+
+app.put('/api/bookings/:id/status', auth, (req, res) => {
+  const { status } = req.body;
+  db.prepare('UPDATE bookings SET status = ? WHERE id = ?').run(status, req.params.id);
+  res.json({ success: true });
+});
+
+app.delete('/api/bookings/:id', auth, (req, res) => {
+  db.prepare('DELETE FROM bookings WHERE id = ?').run(req.params.id);
+  res.json({ success: true });
+});
+
 // ==================== STATS ====================
 app.get('/api/stats', auth, (req, res) => {
   const categories = db.prepare('SELECT COUNT(*) as count FROM categories').get().count;
   const items = db.prepare('SELECT COUNT(*) as count FROM menu_items').get().count;
   const feedback = db.prepare('SELECT COUNT(*) as count FROM feedback').get().count;
   const unread = db.prepare('SELECT COUNT(*) as count FROM feedback WHERE is_read = 0').get().count;
-  res.json({ categories, items, feedback, unread });
+  const bookings = db.prepare('SELECT COUNT(*) as count FROM bookings').get().count;
+  const newBookings = db.prepare("SELECT COUNT(*) as count FROM bookings WHERE status = 'new'").get().count;
+  res.json({ categories, items, feedback, unread, bookings, newBookings });
 });
 
 // SPA fallback in production

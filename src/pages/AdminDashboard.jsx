@@ -30,6 +30,14 @@ export default function AdminDashboard() {
           <div className="label">Непрочитанные</div>
           <div className="value">{stats.unread}</div>
         </div>
+        <div className="stat-card">
+          <div className="label">Бронирование</div>
+          <div className="value">{stats.bookings}</div>
+        </div>
+        <div className="stat-card">
+          <div className="label">Новые заявки</div>
+          <div className="value">{stats.newBookings}</div>
+        </div>
       </div>
 
       <div style={{ background: '#fff', padding: '24px', borderRadius: '12px', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
