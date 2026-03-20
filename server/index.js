@@ -209,10 +209,10 @@ app.delete('/api/feedback/:id', auth, (req, res) => {
 
 // ==================== BOOKINGS ====================
 app.post('/api/bookings', (req, res) => {
-  const { name, phone, date, guests, hall, message } = req.body;
+  const { name, phone, date, guests, eventType, hall, message } = req.body;
   if (!name || !phone || !date) return res.status(400).json({ error: 'Name, phone and date required' });
-  db.prepare('INSERT INTO bookings (name, phone, date, guests, hall, message) VALUES (?, ?, ?, ?, ?, ?)')
-    .run(name, phone, date, guests || null, hall || null, message || null);
+  db.prepare('INSERT INTO bookings (name, phone, date, guests, event_type, hall, message) VALUES (?, ?, ?, ?, ?, ?, ?)')
+    .run(name, phone, date, guests || null, eventType || null, hall || null, message || null);
   res.json({ success: true });
 });
 

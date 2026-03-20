@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { getBookings, updateBookingStatus, deleteBooking } from '../api';
 
-const hallLabels = {
+const eventTypeLabels = {
   wedding: 'Свадьба',
+  cumetrie: 'Кумэтрия',
   birthday: 'День рождения',
   corporate: 'Корпоратив',
   banquet: 'Банкет',
   other: 'Другое',
+};
+
+const hallLabels = {
+  sala1: 'Sala 1 (до 15)',
+  sala2: 'Sala 2 (до 25)',
+  restaurant: 'Ресторан à la carte',
+  terasa: 'Терраса',
+  foisor: 'Фоишор',
 };
 
 const statusLabels = {
@@ -78,7 +87,8 @@ export default function AdminBookings() {
             <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '8px' }}>
               <span><strong>Дата:</strong> {formatEventDate(item.date)}</span>
               {item.guests && <span><strong>Гостей:</strong> {item.guests}</span>}
-              {item.hall && <span><strong>Тип:</strong> {hallLabels[item.hall] || item.hall}</span>}
+              {item.event_type && <span><strong>Тип:</strong> {eventTypeLabels[item.event_type] || item.event_type}</span>}
+              {item.hall && <span><strong>Зал:</strong> {hallLabels[item.hall] || item.hall}</span>}
             </div>
             {item.message && <p>{item.message}</p>}
           </div>

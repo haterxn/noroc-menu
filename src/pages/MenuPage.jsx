@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { getCategories, getItems, sendFeedback, sendBooking } from '../api';
 
 export default function MenuPage() {
@@ -15,7 +16,7 @@ export default function MenuPage() {
 
   // Booking modal
   const [showBooking, setShowBooking] = useState(false);
-  const [booking, setBooking] = useState({ name: '', phone: '', date: '', guests: '', hall: '', message: '' });
+  const [booking, setBooking] = useState({ name: '', phone: '', date: '', guests: '', eventType: '', hall: '', message: '' });
   const [bookingSent, setBookingSent] = useState(false);
   const [bookingLoading, setBookingLoading] = useState(false);
 
@@ -55,7 +56,7 @@ export default function MenuPage() {
     try {
       await sendBooking(booking);
       setBookingSent(true);
-      setBooking({ name: '', phone: '', date: '', guests: '', hall: '', message: '' });
+      setBooking({ name: '', phone: '', date: '', guests: '', eventType: '', hall: '', message: '' });
     } catch { /* ignore */ }
     setBookingLoading(false);
   };
@@ -89,13 +90,18 @@ export default function MenuPage() {
           <div className="booking-banner-text">
             <span className="booking-banner-icon">&#127878;</span>
             <div>
-              <strong>{lang === 'ru' ? 'Банкетный зал' : 'Sala de banchet'}</strong>
-              <span>{lang === 'ru' ? 'Свадьбы, юбилеи, корпоративы' : 'Nunți, aniversări, corporate'}</span>
+              <strong>{lang === 'ru' ? 'Банкетные залы' : 'Săli de banchet'}</strong>
+              <span>{lang === 'ru' ? 'Свадьбы, кумэтрии, юбилеи, корпоративы' : 'Nunți, cumetrii, aniversări, corporate'}</span>
             </div>
           </div>
-          <button className="btn-booking" onClick={() => { setShowBooking(true); setBookingSent(false); }}>
-            {lang === 'ru' ? 'Забронировать' : 'Rezervă'}
-          </button>
+          <div className="booking-banner-buttons">
+            <Link to="/banquet" className="btn-booking btn-booking-outline">
+              {lang === 'ru' ? 'Банкетное меню' : 'Menu banchet'}
+            </Link>
+            <button className="btn-booking" onClick={() => { setShowBooking(true); setBookingSent(false); }}>
+              {lang === 'ru' ? 'Забронировать' : 'Rezervă'}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -133,16 +139,30 @@ export default function MenuPage() {
                     <input className="form-input" type="number" min="1" value={booking.guests} onChange={e => setBooking({ ...booking, guests: e.target.value })} />
                   </div>
                 </div>
-                <div className="form-group">
-                  <label>{lang === 'ru' ? 'Тип мероприятия' : 'Tipul evenimentului'}</label>
-                  <select className="form-input" value={booking.hall} onChange={e => setBooking({ ...booking, hall: e.target.value })}>
-                    <option value="">{lang === 'ru' ? 'Выберите...' : 'Selectați...'}</option>
-                    <option value="wedding">{lang === 'ru' ? 'Свадьба' : 'Nuntă'}</option>
-                    <option value="birthday">{lang === 'ru' ? 'День рождения / Юбилей' : 'Zi de naștere / Aniversare'}</option>
-                    <option value="corporate">{lang === 'ru' ? 'Корпоратив' : 'Corporate'}</option>
-                    <option value="banquet">{lang === 'ru' ? 'Банкет' : 'Banchet'}</option>
-                    <option value="other">{lang === 'ru' ? 'Другое' : 'Altele'}</option>
-                  </select>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>{lang === 'ru' ? 'Тип мероприятия' : 'Tipul evenimentului'}</label>
+                    <select className="form-input" value={booking.eventType} onChange={e => setBooking({ ...booking, eventType: e.target.value })}>
+                      <option value="">{lang === 'ru' ? 'Выберите...' : 'Selectați...'}</option>
+                      <option value="wedding">{lang === 'ru' ? 'Свадьба' : 'Nuntă'}</option>
+                      <option value="cumetrie">{lang === 'ru' ? 'Кумэтрия' : 'Cumetrie'}</option>
+                      <option value="birthday">{lang === 'ru' ? 'День рождения / Юбилей' : 'Zi de naștere / Aniversare'}</option>
+                      <option value="corporate">{lang === 'ru' ? 'Корпоратив / Конференция' : 'Corporate / Conferință'}</option>
+                      <option value="banquet">{lang === 'ru' ? 'Банкет' : 'Banchet'}</option>
+                      <option value="other">{lang === 'ru' ? 'Другое' : 'Altele'}</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>{lang === 'ru' ? 'Зал' : 'Sala'}</label>
+                    <select className="form-input" value={booking.hall} onChange={e => setBooking({ ...booking, hall: e.target.value })}>
+                      <option value="">{lang === 'ru' ? 'Выберите зал...' : 'Selectați sala...'}</option>
+                      <option value="sala1">{lang === 'ru' ? 'Sala 1 (до 15 гостей)' : 'Sala 1 (până la 15 invitați)'}</option>
+                      <option value="sala2">{lang === 'ru' ? 'Sala 2 (до 25 гостей)' : 'Sala 2 (până la 25 invitați)'}</option>
+                      <option value="restaurant">{lang === 'ru' ? 'Ресторан à la carte' : 'Restaurant à la carte'}</option>
+                      <option value="terasa">{lang === 'ru' ? 'Терраса' : 'Terasă'}</option>
+                      <option value="foisor">{lang === 'ru' ? 'Фоишор (беседка)' : 'Foișor'}</option>
+                    </select>
+                  </div>
                 </div>
                 <div className="form-group">
                   <label>{lang === 'ru' ? 'Пожелания' : 'Dorințe'}</label>
@@ -279,6 +299,19 @@ export default function MenuPage() {
         </div>
         <p className="footer-copy">&copy; 2024 Restaurant NOROC. {lang === 'ru' ? 'Все права защищены.' : 'Toate drepturile rezervate.'}</p>
       </footer>
+
+      {/* WhatsApp Widget */}
+      <a
+        href="https://wa.me/37368821888"
+        className="whatsapp-widget"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="WhatsApp"
+      >
+        <svg viewBox="0 0 32 32" width="28" height="28" fill="white">
+          <path d="M16.004 0h-.008C7.174 0 0 7.176 0 16.004c0 3.5 1.132 6.742 3.054 9.378L1.056 31.2l6.04-1.94A15.91 15.91 0 0016.004 32C24.826 32 32 24.826 32 16.004 32 7.176 24.826 0 16.004 0zm9.318 22.594c-.39 1.1-1.932 2.014-3.168 2.28-.844.18-1.946.322-5.656-1.216-4.746-1.968-7.8-6.79-8.036-7.104-.226-.314-1.9-2.53-1.9-4.828s1.2-3.426 1.628-3.894c.428-.47.936-.586 1.248-.586.312 0 .624.002.898.016.288.014.674-.11 1.054.804.39.938 1.326 3.236 1.442 3.47.116.234.194.506.038.82-.156.312-.234.508-.468.782-.234.274-.492.612-.702.82-.234.234-.478.488-.206.958.274.468 1.216 2.006 2.61 3.252 1.792 1.6 3.302 2.096 3.77 2.33.468.234.742.194 1.016-.116.274-.312 1.17-1.366 1.482-1.836.312-.468.624-.39 1.054-.234.43.156 2.728 1.288 3.196 1.522.468.234.78.352.898.546.116.196.116 1.124-.274 2.224z"/>
+        </svg>
+      </a>
     </div>
   );
 }

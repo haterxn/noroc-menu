@@ -59,12 +59,20 @@ db.exec(`
     phone TEXT NOT NULL,
     date TEXT NOT NULL,
     guests INTEGER,
+    event_type TEXT,
     hall TEXT,
     message TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     status TEXT DEFAULT 'new'
   );
 `);
+
+// Migrate: add event_type column if missing
+try {
+  db.prepare("SELECT event_type FROM bookings LIMIT 1").get();
+} catch {
+  db.exec("ALTER TABLE bookings ADD COLUMN event_type TEXT");
+}
 
 // Create default admin if none exists
 const adminExists = db.prepare('SELECT COUNT(*) as count FROM admin').get();
