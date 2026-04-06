@@ -1,6 +1,4 @@
 node_modules
 dist
 noroc.db
-public/uploads/*
-!public/uploads/.gitkeep
 .DS_Store

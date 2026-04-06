@@ -2,22 +2,22 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --cream: #F3F0EB;
+  --cream: #EFF2EC;
   --white: #FFFFFF;
-  --gold: #C9A96E;
-  --gold-light: #E8D5B0;
-  --gold-dark: #A88B4A;
+  --gold: #5B7855;
+  --gold-light: #8BAA85;
+  --gold-dark: #3E5A38;
   --burgundy: #7B2D3B;
   --burgundy-light: #9E4A5A;
   --text: #2C2C2C;
-  --text-light: #6B6B6B;
-  --text-muted: #9A9A9A;
-  --border: #E8E4DF;
+  --text-light: #5A6358;
+  --text-muted: #8A9488;
+  --border: #D8DDD5;
   --shadow: 0 2px 12px rgba(0,0,0,0.06);
   --shadow-lg: 0 8px 30px rgba(0,0,0,0.1);
   --radius: 12px;
   --radius-sm: 8px;
-  --font-display: 'Playfair Display', Georgia, serif;
+  --font-display: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
   --font-body: 'Inter', -apple-system, sans-serif;
 }
 
@@ -36,7 +36,7 @@ body {
 
 /* Hero */
 .hero {
-  background: linear-gradient(135deg, var(--white) 0%, #F5F0E8 100%);
+  background: linear-gradient(135deg, var(--white) 0%, #EDF2E8 100%);
   text-align: center;
   padding: 60px 20px 40px;
   border-bottom: 1px solid var(--border);
@@ -827,7 +827,7 @@ body {
 }
 
 .admin-nav a:hover { background: var(--cream); color: var(--text); }
-.admin-nav a.active { color: var(--gold-dark); background: #F8F4ED; font-weight: 500; }
+.admin-nav a.active { color: var(--gold-dark); background: #EFF5EC; font-weight: 500; }
 
 .admin-logout {
   padding: 12px 24px;

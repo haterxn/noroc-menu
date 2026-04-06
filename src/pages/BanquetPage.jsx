@@ -66,9 +66,9 @@ const sectionLabels = {
 };
 
 const sectionIcons = {
-  cold: '❄',
-  hot: '🔥',
-  dessert: '🍰',
+  cold: '',
+  hot: '',
+  dessert: '',
 };
 
 const dishPhotos = {
