@@ -3,9 +3,10 @@
   "configurations": [
     {
       "name": "noroc-menu",
-      "runtimeExecutable": "npm",
+      "runtimeExecutable": "/opt/homebrew/bin/npm",
       "runtimeArgs": ["run", "dev"],
-      "port": 5173
+      "port": 5175,
+      "cwd": "/Users/gapotiyartem/Downloads/noroc-menu"
     }
   ]
 }
